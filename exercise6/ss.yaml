@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-php-svc
+spec:
+  ports:
+  - port: 3306
+    name: mysql
+    targetPort: 3306
+  clusterIP: None
+  selector:
+    app: mysql-php-svc
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ss
+spec:
+  serviceName: "mysql-php-svc"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-php-svc
+  template:
+    metadata:
+      labels:
+        app: mysql-php-svc
+    spec:
+      containers:
+      - name: mysql
+        image: elestio/mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+      - name: phpmyadmin
+        image: phpmyadmin:latest
+        ports:
+        - containerPort: 80
+          name: phpmyadmin
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "sc-php-mysql"
+      resources:
+        requests:
+          storage: 1Gi
+

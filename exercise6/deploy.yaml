@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: q4
+  name: q4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: q4
+  template:
+    metadata:
+      labels:
+        app: q4
+    spec:
+      nodeName: minikube-m02
+      containers:
+      - image: nginx:latest
+        name: nginx
+      nodeSelector:
+        question: four
