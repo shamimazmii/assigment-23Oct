@@ -1,6 +1,6 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: sc-php-mysql
-provisioner: kubernetes.io/no-provisioner # indicates that this StorageClass does not support automatic provisioning
+  name: mysql-storage
+provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
